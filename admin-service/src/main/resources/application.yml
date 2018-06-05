@@ -1,0 +1,25 @@
+management:
+  security:
+    enabled: 'false'
+security:
+  user:
+    name: admin
+    password: admin
+server:
+  port: '8093'
+spring:
+  application:
+    name: Boot-Admin
+#  boot:
+#    admin:
+#      context-path: /admin
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 10
+  client:
+    registry-fetch-interval-seconds: 5
+    service-url: 
+      defaultZone: http://localhost:8761/eureka
+
+      

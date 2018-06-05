@@ -1,0 +1,42 @@
+server:
+  port: '8383'
+spring:
+  sleuth:
+    sampler:
+      percentage: 10
+  zipkin:
+    base-url: http://192.168.99.100:9411/
+  application:
+    name: order-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.99.100:3306/catalog
+    username: root
+    password: admin
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  
+#spring:
+#  application:
+#    name: orderservice
+#  cloud:
+#    config:
+#      uri: http://localhost:8888
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+management:
+  security:
+    enabled: false

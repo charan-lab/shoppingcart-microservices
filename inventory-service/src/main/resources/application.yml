@@ -1,0 +1,30 @@
+server:
+  port: 8098
+spring:
+  sleuth:
+    sampler:
+      percentage: 10
+  zipkin:
+    base-url: http://192.168.99.100:9411/
+  application:
+    name: inventory-service
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.99.100:3306/catalog
+    username: root
+    password: admin
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+    enabled: true
+logging:
+  file: inventory.log
+management:
+  security:
+    enabled: false

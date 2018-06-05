@@ -1,0 +1,23 @@
+server:
+  port: '9090'
+spring:
+  application:
+    name: shopping-cart  
+zuul:
+  prefix: /ui  
+  routes:
+    catalogservice:
+      path: /catalog/**
+      url: http://localhost:8282/
+    orderservice:
+      path: /orders/**
+      service-id: ORDER-SERVICE
+    inventory:
+      path: /inventory/**
+      service-id: INVENTORY-SERVICE
+  trace-request-body: true
+
+# if you want to use load balancer for a service that is registered in eureka, configure the list of servers below
+#ORDER-SERVICE:
+#  ribbon:
+#    listOfServers: httpbin.org,eu.httpbin.org  

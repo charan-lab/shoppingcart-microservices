@@ -1,0 +1,25 @@
+elasticsearch:
+    image: 'elasticsearch:latest'
+    ports:
+        - '9200:9200'
+    environment:
+        ES_JAVA_OPTS: '-Xmx256m -Xms256m'
+logstash:
+    image: 'logstash:latest'
+    command: 'logstash -f /etc/logstash/conf.d/logstash.conf'
+    volumes:
+        - './logstash/config:/etc/logstash/conf.d'
+    environment:
+        LS_JAVA_OPTS: '-Xmx256m -Xms256m'
+    ports:
+        - '5000:5000'
+    links:
+        - elasticsearch
+kibana:
+    build: kibana/
+    volumes:
+        - './kibana/config/kibana.yml:/opt/kibana/config/kibana.yml'
+    ports:
+        - '5601:5601'
+    links:
+        - elasticsearch

@@ -1,0 +1,3 @@
+chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
+
+use this command in case if your console shows any errors while running application
