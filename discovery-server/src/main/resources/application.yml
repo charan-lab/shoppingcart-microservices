@@ -5,6 +5,8 @@ server:
 
 spring:
   profiles: default
+  application:
+    name: discovery
   
 eureka:
   instance:
@@ -30,13 +32,14 @@ spring:
 server:
   port: 8011
 eureka:
-  instance:
-    hostname: ds-primary 
+#  instance:
+#    hostname: ds-primary 
   client:
     registerWithEureka: true
     fetchRegistry: true        
     serviceUrl:
-      defaultZone: http://eureka-secondary:8012/eureka/,http://eureka-tertiary:8013/eureka/
+      defaultZone: http://localhost:8012/eureka/,http://localhost:8013/eureka/
+#      defaultZone: http://ds-secondary:8012/eureka/,http://ds-tertiary:8013/eureka/
 
 ---
 spring:
@@ -46,13 +49,14 @@ spring:
 server:
   port: 8012
 eureka:
-  instance:
-    hostname: ds-secondary 
+#  instance:
+#    hostname: ds-secondary 
   client:
     registerWithEureka: true
     fetchRegistry: true        
     serviceUrl:
-      defaultZone: http://eureka-secondary:8011/eureka/,http://eureka-tertiary:8013/eureka/
+      defaultZone: http://localhost:8013/eureka/,http://localhost:8011/eureka/
+#      defaultZone: http://ds-primary:8011/eureka/,http://ds-tertiary:8013/eureka/
 
 ---
 spring:
@@ -62,11 +66,12 @@ spring:
 server:
   port: 8013
 eureka:
-  instance:
-    hostname: ds-tertiary        
+#  instance:
+#    hostname: ds-tertiary        
   client:
     registerWithEureka: true
     fetchRegistry: true        
     serviceUrl:
-      defaultZone: http://eureka-secondary:8011/eureka/,http://eureka-tertiary:8012/eureka/
+      defaultZone: http://localhost:8011/eureka/,http://localhost:8012/eureka/
+#      defaultZone: http://ds-primary:8011/eureka/,http://ds-tertiary:8012/eureka/
          
