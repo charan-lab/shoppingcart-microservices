@@ -1,0 +1,27 @@
+pipeline {
+ agent {
+  docker {
+   image 'charan556/jenkins-slave'
+   args '-v /root/.m2:/root/.m2'
+  }
+ }
+ stages {
+  stage('Build') {
+   steps {
+    sh 'mvn -B -DskipTests clean package'
+   }
+  }
+  stage('Build Docker Image') {
+   steps {
+    sh "cp ./target/service-registry-1.0.0-SNAPSHOT.jar ."
+    sh "docker build -f ./Dockerfile -t discovery-service ."
+   }
+  }
+  stage('Run Docker Image') {
+   steps {
+    sh "if [ \$(docker ps -aqf 'name=my-java-app') ] ;  then docker rm -f  \$(docker ps -aqf 'name=discovery-service');  else echo \" No container found\" ; fi"
+    sh "docker run -d discovery-service java -jar /discovery-service.jar"
+   }
+  }
+ }
+}
