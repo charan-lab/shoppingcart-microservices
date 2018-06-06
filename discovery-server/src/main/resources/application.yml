@@ -1,17 +1,72 @@
+---
+# This is default profile and is used when running a single instance completely standalone.
 server:
   port: ${PORT:8761} # Indicate the default PORT where this service will be started
 
+spring:
+  profiles: default
+  
 eureka:
   instance:
-    hostname: localhost
+    hostname: discoveryservice
   client:
     registerWithEureka: false # telling the server not to register himself in the service
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
-logging:
-  level:
-      - ".=info"
-      - "com.memorynotfound=debug"
-      - "org.springframework=info"
+# primary, secondary, and tertiary illustrate running 3 intercommunicating instances.  This example has them running
+# side-by-side on localhost -- which is unrealistic in production -- but does illustrate how multiple instances collaborate.
+
+# java -jar -Dspring.profiles.active=primary lab-4-eureka-server-solution-1.jar
+# java -jar -Dspring.profiles.active=secondary lab-4-eureka-server-solution-1.jar
+# java -jar -Dspring.profiles.active=tertiary lab-4-eureka-server-solution-1.jar
+
+---
+spring:
+  application:
+    name: ds-clustered      
+  profiles: primary
+server:
+  port: 8011
+eureka:
+  instance:
+    hostname: ds-primary 
+  client:
+    registerWithEureka: true
+    fetchRegistry: true        
+    serviceUrl:
+      defaultZone: http://eureka-secondary:8012/eureka/,http://eureka-tertiary:8013/eureka/
+
+---
+spring:
+  application:
+    name: ds-clustered 
+  profiles: secondary
+server:
+  port: 8012
+eureka:
+  instance:
+    hostname: ds-secondary 
+  client:
+    registerWithEureka: true
+    fetchRegistry: true        
+    serviceUrl:
+      defaultZone: http://eureka-secondary:8011/eureka/,http://eureka-tertiary:8013/eureka/
+
+---
+spring:
+  application:
+    name: ds-clustered                   
+  profiles: tertiary       
+server:
+  port: 8013
+eureka:
+  instance:
+    hostname: ds-tertiary        
+  client:
+    registerWithEureka: true
+    fetchRegistry: true        
+    serviceUrl:
+      defaultZone: http://eureka-secondary:8011/eureka/,http://eureka-tertiary:8012/eureka/
+         
